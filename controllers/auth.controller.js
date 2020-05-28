@@ -1,7 +1,7 @@
 const User = require('../models/user.model');
 
-exports.postSignin = async(req, res,next) => {
-    if (!req.body) return res.sendStatus(400);
+exports.postSignup = async(req, res, next) => {
+    if (!req.body || !req.body.username || !req.body.email || !req.body.password) return res.sendStatus(400);
 
     const user = new User({... req.body});
 

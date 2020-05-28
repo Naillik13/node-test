@@ -18,6 +18,9 @@ app.use('/', indexRouter);
 const authRouter = require('./routes/auth.routes');
 app.use('/auth', authRouter);
 
+const userRouter = require('./routes/user.routes');
+app.use('/users', userRouter);
+
 mongoose
     .connect(db, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true })
     .then(() => console.log("Successfully connected to database"))

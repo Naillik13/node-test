@@ -12,10 +12,10 @@ app.use(morgan('combined'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-const indexRouter = require('./routes/index');
+const indexRouter = require('./routes/index.routes');
 app.use('/', indexRouter);
 
-const authRouter = require('./routes/auth');
+const authRouter = require('./routes/auth.routes');
 app.use('/auth', authRouter);
 
 mongoose

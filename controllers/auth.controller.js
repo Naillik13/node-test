@@ -1,9 +1,19 @@
 const User = require('../models/user.model');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const {JWT_SECRET} = require('../utils/config');
 
 const userExists = async(email) =>
     await User.findOne({ email })
         .then(user => user || false);
+
+const generateToken = (user) => {
+    return jwt.sign({
+        iss: "nodeformation",
+        email: user.email,
+        iat: Date.now()
+    }, JWT_SECRET)
+};
 
 exports.signup = async(req, res, next) => {
     if (!req.body || !req.body.username || !req.body.email || !req.body.password) return res.sendStatus(400);
@@ -31,7 +41,7 @@ exports.login = async(req, res, next) => {
     const { email, password } = req.body;
 
     try {
-        const user = await userExists(email)
+        const user = await userExists(email);
         if (!user ) {
             return res.status(401).json({
                 message: "Authentication failed"
@@ -44,9 +54,10 @@ exports.login = async(req, res, next) => {
             })
         }
 
-        return res.status(200).json({
-            message: "Authentication succeed",
-            result: user
+        const token = generateToken(user);
+        res.status(200).json({
+            token: token,
+            userId: user._id.toString()
         })
     } catch (err) {
         console.log(err);
